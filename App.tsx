@@ -450,7 +450,12 @@ function App() {
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-zinc-500 text-xs font-black uppercase tracking-widest">Llave Nu</span>
-                  <span className="text-white font-body tracking-wider">@WRV034</span>
+                  <span className="text-white font-body tracking-wider flex items-center gap-2">
+                    @WRV034
+                    <button onClick={() => { navigator.clipboard.writeText('@WRV034'); alert('Copiado'); }} className="text-zinc-500 hover:text-white transition-colors">
+                      <span className="material-symbols-outlined text-sm">content_copy</span>
+                    </button>
+                  </span>
                 </div>
               </div>
             </div>
