@@ -451,7 +451,7 @@ const RegistrationForm: React.FC = () => {
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="bg-zinc-900/50 border-l-4 border-[#9d69ff] p-6 hover:bg-zinc-900 transition-colors">
                   <div className="flex items-center gap-3 mb-4">
-                    <img src="Nu.png" alt="Nu" className="w-8 h-8 object-contain" />
+                    <img src="/Nu.png" alt="Nu" className="w-8 h-8 object-contain" />
                     <h6 className="font-display text-white uppercase italic">Nu Bank</h6>
                   </div>
                   <div className="space-y-4">
@@ -480,7 +480,7 @@ const RegistrationForm: React.FC = () => {
 
                 <div className="bg-zinc-900/50 border-l-4 border-white p-6 hover:bg-zinc-900 transition-colors relative group">
                   <div className="flex items-center gap-3 mb-4">
-                    <img src="nequi.png" alt="Nequi" className="w-8 h-8 object-contain" />
+                    <img src="/nequi.png" alt="Nequi" className="w-8 h-8 object-contain" />
                     <h6 className="font-display text-white uppercase italic">Nequi</h6>
                   </div>
                   <div onClick={() => copyToClipboard('3136336446')} className="flex justify-between items-center cursor-pointer group/copy mb-2 relative pb-4">
@@ -500,7 +500,7 @@ const RegistrationForm: React.FC = () => {
               <div className="grid lg:grid-cols-2 gap-12">
                 <div className="space-y-6 text-center">
                   <div className="bg-white p-3 rounded shadow-2xl relative group/qr transform -rotate-1 hover:rotate-0 transition-transform max-w-[200px] mx-auto">
-                    <img src="qr nequi.jpeg" alt="QR Nequi" className="w-full h-auto" />
+                    <img src="/qr nequi.jpeg" alt="QR Nequi" className="w-full h-auto" />
                     <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover/qr:opacity-100 transition-opacity flex items-center justify-center p-4">
                       <span className="bg-black text-white text-[10px] font-black uppercase px-4 py-2 text-center leading-tight">Escanea desde tu <br /> app nequi</span>
                     </div>
@@ -524,17 +524,19 @@ const RegistrationForm: React.FC = () => {
                       </p>
                     </div>
                   </InputGroup>
-                  <div className="flex items-center gap-4 p-3 bg-zinc-900/30 border border-zinc-800 hover:border-zinc-700 transition-colors">
-                    <input
-                      type="checkbox"
-                      disabled={!formData.termsAccepted}
-                      checked={formData.termsAccepted}
-                      readOnly
-                      className="form-checkbox h-5 w-5 text-primary bg-black border-zinc-700 focus:ring-0 focus:ring-offset-0 disabled:opacity-50"
-                    />
+                  <div
+                    onClick={() => !formData.termsAccepted && setShowWaiver(true)}
+                    className={`flex items-center gap-4 p-3 border transition-colors cursor-pointer ${errors.termsAccepted ? 'bg-primary/10 border-primary' : 'bg-zinc-900/30 border-zinc-800 hover:border-zinc-700'
+                      }`}
+                  >
+                    <div className={`w-5 h-5 border flex items-center justify-center transition-colors ${formData.termsAccepted ? 'bg-primary border-primary' : 'bg-black border-zinc-700'
+                      }`}>
+                      {formData.termsAccepted && <span className="material-symbols-outlined text-black text-sm font-bold">check</span>}
+                    </div>
+
                     <div className="flex-1">
                       <p className={`text-[10px] uppercase font-black tracking-widest leading-tight ${errors.termsAccepted ? 'text-primary' : 'text-zinc-500'}`}>
-                        He leído y acepto el <button type="button" onClick={() => setShowWaiver(true)} className="text-white hover:text-primary underline decoration-primary underline-offset-4 transition-colors">Deslinde de Responsabilidad</button>
+                        He leído y acepto el <span className="text-white underline decoration-primary underline-offset-4">Deslinde de Responsabilidad</span>
                       </p>
                     </div>
                   </div>
