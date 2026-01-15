@@ -121,7 +121,7 @@ function App() {
             className="w-full bg-black border border-zinc-800 p-4 text-white mb-6 focus:border-primary focus:outline-none text-center tracking-widest"
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
-                const ADMIN_HASH = '8d3a9c7f1e2b5a6d'; // Hash de la contraseña real
+                const ADMIN_HASH = '69e9db8e'; // Hash de la contraseña real
                 const inputHash = simpleHash((e.target as HTMLInputElement).value);
 
                 if (inputHash === ADMIN_HASH) {
