@@ -6,8 +6,19 @@ import AdminView from './components/AdminView';
 import AthleteWall from './components/AthleteWall';
 import RegistrationStatus from './components/RegistrationStatus';
 import FAQ from './components/FAQ';
-import { CATEGORIES, MAX_SLOTS_PER_CATEGORY } from './constants';
+import { CATEGORIES, MAX_SLOTS_PER_CATEGORY, PRICING_TIERS } from './constants';
 import { supabase } from './supabaseClient';
+
+// Agregar función de hash simple (no criptográfica, solo ofuscación):
+function simpleHash(str: string): string {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash;
+  }
+  return Math.abs(hash).toString(16);
+}
 
 function App() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -16,11 +27,12 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [categoryCounts, setCategoryCounts] = useState<Record<string, number>>({});
   const [showStatusCheck, setShowStatusCheck] = useState(false);
+  const [currentPrice, setCurrentPrice] = useState<string>('');
 
   useEffect(() => {
-    // Check if ?admin is in the URL
+    // Check for obscure admin route (Hardening)
     const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.has('admin')) {
+    if (urlParams.get('mode') === 'sys_admin_x9') {
       setIsAdmin(true);
       document.title = "DARE LEAGUE | ADMIN DASHBOARD";
 
@@ -42,6 +54,14 @@ function App() {
       }
     };
 
+    // Calculate Price
+    const now = new Date();
+    const activeTier = PRICING_TIERS.find(tier => {
+      if (!tier.endDate) return now >= tier.startDate;
+      return now >= tier.startDate && now <= tier.endDate;
+    });
+    if (activeTier) setCurrentPrice(activeTier.formattedPrice);
+
     fetchCounts();
     const interval = setInterval(fetchCounts, 60000); // Sync every minute
 
@@ -50,7 +70,7 @@ function App() {
       setIsScrolled(window.scrollY > 50);
 
       // Scrollspy Logic
-      const sections = ['competition', 'categories', 'bracket', 'pricing', 'register'];
+      const sections = ['competition', 'categories', 'bracket', 'pricing', 'payment-info', 'register'];
       // Offset matches the scroll-margin-top + visual comfort zone
       const scrollPosition = window.scrollY + 150;
 
@@ -101,7 +121,10 @@ function App() {
             className="w-full bg-black border border-zinc-800 p-4 text-white mb-6 focus:border-primary focus:outline-none text-center tracking-widest"
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
-                if ((e.target as HTMLInputElement).value === 'DARE2026') {
+                const ADMIN_HASH = '8d3a9c7f1e2b5a6d'; // Hash de la contraseña real
+                const inputHash = simpleHash((e.target as HTMLInputElement).value);
+
+                if (inputHash === ADMIN_HASH) {
                   setIsAuthenticated(true);
                   sessionStorage.setItem('admin_auth', 'true');
                 } else {
@@ -166,6 +189,13 @@ function App() {
               Precios
             </a>
             <a
+              href="#payment-info"
+              onClick={(e) => scrollToSection(e, 'payment-info')}
+              className={`transition-colors duration-300 ${activeSection === 'payment-info' ? 'text-primary scale-110 font-bold drop-shadow-sm' : 'text-zinc-400 hover:text-white'}`}
+            >
+              Pago
+            </a>
+            <a
               href="#register"
               onClick={(e) => scrollToSection(e, 'register')}
               className={`transition-colors duration-300 ${activeSection === 'register' ? 'text-primary scale-110 font-bold drop-shadow-sm' : 'text-white hover:text-primary'}`}
@@ -198,13 +228,31 @@ function App() {
             <h2 className="text-white text-2xl md:text-4xl font-display uppercase tracking-widest mb-4">
               Competencia 1 vs 1 de CrossFit
             </h2>
-            <p className="text-zinc-400 text-lg md:text-xl font-body max-w-2xl mx-auto tracking-wide uppercase italic border-y border-zinc-800 py-4">
-              No es para cualquiera.
-            </p>
+            <div className="text-zinc-400 text-lg md:text-xl font-body max-w-2xl mx-auto tracking-wide uppercase italic border-y border-zinc-800 py-4">
+              <p>Bracket de eliminación directa. 32 atletas por categoría.</p>
+              <p>Pierdes una vez y se acabó. Sin equipos, sin excusas.</p>
+            </div>
           </div>
 
           <div className="mb-16">
             <Countdown />
+            <div className="mt-8 flex flex-col items-center gap-2 animate-pulse">
+              <div className="flex items-center gap-2 text-primary uppercase font-black tracking-widest text-xs">
+                <span className="material-symbols-outlined text-sm">sell</span>
+                Precio sube $25.000 al cambiar etapa
+              </div>
+              <div className="flex items-center gap-2 text-zinc-500 uppercase font-bold tracking-widest text-[10px]">
+                <span className="material-symbols-outlined text-xs">group</span>
+                <span>
+                  {128 -
+                    (categoryCounts['PRINCIPIANTE_MASCULINO'] || 0) -
+                    (categoryCounts['PRINCIPIANTE_FEMENINO'] || 0) -
+                    (categoryCounts['INTERMEDIO_MASCULINO'] || 0) -
+                    (categoryCounts['INTERMEDIO_FEMENINO'] || 0)
+                  } cupos totales disponibles
+                </span>
+              </div>
+            </div>
           </div>
 
           <div className="flex flex-col gap-6 items-center justify-center">
@@ -346,9 +394,113 @@ function App() {
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="text-center mb-16">
             <h2 className="font-display text-6xl md:text-8xl uppercase mb-4 text-white">Tarifas</h2>
-            <p className="text-primary font-black uppercase tracking-[0.2em] text-sm italic">El valor aumenta por etapas. Asegura el mejor precio.</p>
+            <div className="text-primary font-black uppercase tracking-[0.2em] text-sm italic space-y-2">
+              <p>Kit oficial completo, bracket 1v1, seguro médico y tu nombre en el muro de atletas.</p>
+              <p>Esto no es una carrera de 5K. El precio refleja el nivel.</p>
+            </div>
           </div>
           <PricingCards />
+        </div>
+      </section>
+
+      {/* Payment Info Section */}
+      <section id="payment-info" className="py-24 px-4 bg-zinc-950 border-t border-zinc-900 scroll-mt-24">
+        <div className="max-w-5xl mx-auto text-center">
+          <div className="mb-12">
+            <h2 className="font-display text-4xl md:text-6xl uppercase mb-4 text-white">
+              Cómo <span className="text-primary">Pagar</span>
+            </h2>
+            <p className="text-zinc-500 uppercase tracking-widest text-sm font-bold">
+              Realiza tu pago antes de completar el registro
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8 mb-12">
+
+            {/* Nu Bank */}
+            <div className="bg-zinc-900/50 border border-zinc-900 p-8 hover:border-[#9d69ff] transition-colors group">
+              <div className="flex items-center justify-center gap-3 mb-6">
+                <img src="/Nu.png" alt="Nu" className="w-10 h-10 object-contain grayscale group-hover:grayscale-0 transition-all" />
+                <h3 className="font-display text-2xl text-white uppercase italic">Nu Bank</h3>
+              </div>
+              <div className="space-y-4">
+                <div className="flex justify-between items-center border-b border-zinc-800 pb-2">
+                  <span className="text-zinc-500 text-xs font-black uppercase tracking-widest">Tipo</span>
+                  <span className="text-white font-body tracking-wider">Ahorros</span>
+                </div>
+                <div className="flex justify-between items-center border-b border-zinc-800 pb-2">
+                  <span className="text-zinc-500 text-xs font-black uppercase tracking-widest">Número</span>
+                  <span className="text-white font-body tracking-wider text-xl">53350851</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-zinc-500 text-xs font-black uppercase tracking-widest">Llave Nu</span>
+                  <span className="text-white font-body tracking-wider">@WRV034</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Nequi */}
+            <div className="bg-zinc-900/50 border border-zinc-900 p-8 hover:border-white transition-colors group">
+              <div className="flex items-center justify-center gap-3 mb-6">
+                <img src="/nequi.png" alt="Nequi" className="w-10 h-10 object-contain grayscale group-hover:grayscale-0 transition-all" />
+                <h3 className="font-display text-2xl text-white uppercase italic">Nequi</h3>
+              </div>
+              <div className="space-y-4">
+                <div className="flex justify-between items-center border-b border-zinc-800 pb-2">
+                  <span className="text-zinc-500 text-xs font-black uppercase tracking-widest">Celular</span>
+                  <span className="text-white font-body tracking-wider text-xl">313 633 6446</span>
+                </div>
+                <div className="flex justify-center pt-2">
+                  <img src="/qr nequi.jpeg" alt="QR Nequi" className="w-32 h-32 object-contain mix-blend-screen opacity-80" />
+                </div>
+                <div className="text-center">
+                  <span className="text-zinc-600 text-[10px] uppercase font-black tracking-widest">Titular: William Reyes V.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Validation */}
+          <div className="mb-12">
+            <div className="inline-block bg-primary/10 border border-primary/30 p-6">
+              <h4 className="text-primary font-black uppercase tracking-widest text-xs mb-2">Valor a transferir</h4>
+              <div className="text-white font-display text-4xl mb-2">
+                {currentPrice}
+              </div>
+              <p className="text-zinc-400 text-[10px] uppercase font-bold tracking-widest">
+                ⚠️ Guarda tu comprobante para adjuntarlo en el formulario
+              </p>
+            </div>
+          </div>
+
+          <div className="grid md:grid-cols-4 gap-4 text-left max-w-4xl mx-auto mb-12">
+            <div className="bg-zinc-900 p-4 border-l-2 border-primary">
+              <span className="block text-primary font-black text-xl mb-2">▸</span>
+              <p className="text-zinc-400 text-xs uppercase font-bold leading-relaxed">Realiza la transferencia por el valor exacto mostrado en precios</p>
+            </div>
+            <div className="bg-zinc-900 p-4 border-l-2 border-primary">
+              <span className="block text-primary font-black text-xl mb-2">▸</span>
+              <p className="text-zinc-400 text-xs uppercase font-bold leading-relaxed">Guarda el comprobante de pago (screenshot o PDF)</p>
+            </div>
+            <div className="bg-zinc-900 p-4 border-l-2 border-primary">
+              <span className="block text-primary font-black text-xl mb-2">▸</span>
+              <p className="text-zinc-400 text-xs uppercase font-bold leading-relaxed">Completa el formulario de registro y adjunta tu comprobante</p>
+            </div>
+            <div className="bg-zinc-900 p-4 border-l-2 border-primary">
+              <span className="block text-primary font-black text-xl mb-2">▸</span>
+              <p className="text-zinc-400 text-xs uppercase font-bold leading-relaxed">Comprobantes falsos o alterados = descalificación sin reembolso</p>
+            </div>
+          </div>
+
+          <div className="text-center">
+            <a
+              href="#register"
+              onClick={(e) => scrollToSection(e, 'register')}
+              className="inline-block bg-primary hover:bg-white hover:text-black text-white font-display uppercase tracking-widest px-12 py-4 transition-all shadow-[0_0_30px_rgba(239,53,61,0.3)] cursor-pointer"
+            >
+              Ya pagué, llenar formulario →
+            </a>
+          </div>
         </div>
       </section>
 

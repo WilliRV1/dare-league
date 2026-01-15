@@ -40,7 +40,7 @@ export const CATEGORIES = [
   {
     id: 'PRINCIPIANTE',
     title: 'PRINCIPIANTE',
-    description: 'Tu primera vez en el ruedo. Movimientos básicos, intensidad máxima.',
+    description: 'Si entrenas hace menos de 2 años o necesitas banda para pull-ups. Aquí empiezas a competir de verdad, no solo a entrenar.',
     standards: [
       { exercise: 'Pull Ups', male: 'Banda', female: 'Banda' },
       { exercise: 'Snatch', male: '75 lb', female: '45 lb' },
@@ -54,7 +54,7 @@ export const CATEGORIES = [
   {
     id: 'INTERMEDIO',
     title: 'INTERMEDIO',
-    description: 'Ya conoces el dolor. Ahora vienes a demostrar dominio técnico.',
+    description: 'Dominas snatch y clean & jerk sin asistencia. Pull-ups estrictos. T2B sin romper forma. El nivel donde la técnica separa a los que entrenan de los que compiten.',
     standards: [
       { exercise: 'Pull Ups', male: 'Si', female: 'Banda' },
       { exercise: 'Snatch', male: '95 lb', female: '55 lb' },

@@ -8,6 +8,9 @@ const AdminView: React.FC = () => {
     const [registrations, setRegistrations] = useState<Registration[]>([]);
     const [loading, setLoading] = useState(true);
     const [selectedAthlete, setSelectedAthlete] = useState<Registration | null>(null);
+
+    // Client-side Hardening: Check immediately
+    if (sessionStorage.getItem('admin_auth') !== 'true') return null;
     const [isExporting, setIsExporting] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const [statusFilter, setStatusFilter] = useState<string>('ALL');
@@ -142,6 +145,27 @@ const AdminView: React.FC = () => {
             openFlyerWindow();
         } finally {
             setIsExporting(false);
+        }
+    };
+
+    const deleteRegistration = async (id: string, path: string) => {
+        if (!window.confirm('¿ESTÁS SEGURO? Esto eliminará permanentemente el registro y el archivo. Esta acción NO se puede deshacer.')) return;
+
+        // 1. Delete File
+        if (path) {
+            const { error: storageError } = await supabase.storage.from('payment-proofs').remove([path]);
+            if (storageError) console.error('Storage delete error:', storageError);
+        }
+
+        // 2. Delete Record
+        const { error } = await supabase.from('registrations').delete().eq('id', id);
+
+        if (error) {
+            alert('Error deleting: ' + error.message);
+        } else {
+            fetchRegistrations();
+            setSelectedAthlete(null);
+            setRejectionNotes('');
         }
     };
 
@@ -300,6 +324,12 @@ const AdminView: React.FC = () => {
                                             className="flex-1 border border-zinc-800 hover:border-primary hover:text-primary py-4 text-[10px] font-black uppercase transition-all"
                                         >
                                             RECHAZAR {rejectionNotes && 'CON MOTIVO'}
+                                        </button>
+                                        <button
+                                            onClick={() => deleteRegistration(selectedAthlete.id, selectedAthlete.payment_proof_path)}
+                                            className="flex-1 bg-red-900/50 hover:bg-red-900 border border-red-900 text-red-500 hover:text-white py-4 text-[10px] font-black uppercase transition-all"
+                                        >
+                                            ELIMINAR (LIBERAR CUPO)
                                         </button>
                                         <button
                                             onClick={() => updateStatus(selectedAthlete.id, RegistrationStatus.APPROVED)}

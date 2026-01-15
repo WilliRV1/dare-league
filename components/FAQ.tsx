@@ -8,23 +8,23 @@ interface FAQItem {
 const FAQ_ITEMS: FAQItem[] = [
     {
         question: "¿Qué incluye mi inscripción?",
-        answer: "Tu inscripción incluye el derecho a competir, placa oficial, hidratación durante el evento, acceso a la zona de calentamiento y fotografía profesional."
+        answer: "Acceso al bracket oficial, kit de competidor (placa numerada + shirt técnica), hidratación en zona de atletas, warm-up area exclusiva y registro fotográfico profesional. Las fotos se envían 72h post-evento. No incluye entrada para espectadores."
     },
     {
         question: "¿Pueden asistir espectadores?",
-        answer: "Sí, la entrada para espectadores tiene un costo mínimo que se anunciará cerca a la fecha. El aforo es limitado para garantizar la seguridad de los atletas."
+        answer: "Sí, pero el aforo es limitado para mantener el ambiente de competencia real. El costo de entrada se anuncia 2 semanas antes del evento. Esto no es un show, es un bracket de eliminatoria."
     },
     {
         question: "¿Hay estacionamiento disponible?",
-        answer: "El Box Coach Pipe Rubio cuenta con espacios limitados. Recomendamos usar transporte público o llegar con tiempo para parquear en zonas aledañas seguras."
+        answer: "Espacios limitados en el Box. Llega con tiempo o usa transporte público. La competencia arranca puntual — heat perdido = descalificación automática."
     },
     {
         question: "¿Cómo se definen los heats?",
-        answer: "Los horarios de competencia (Heats) se publicarán 48 horas antes del evento en nuestra cuenta de Instagram @dareleague2025 y se enviarán por correo electrónico."
+        answer: "El bracket y horarios se publican 48 horas antes en @dareleague2025 y por email. Estudia tu bracket. Conoce a tu rival. No hay cambios de horario una vez publicado."
     },
     {
         question: "¿Qué pasa si me lesiono antes del evento?",
-        answer: "Según nuestras políticas, la inscripción no es reembolsable. Sin embargo, puedes transferir tu cupo a otro atleta de la misma categoría hasta 15 días antes del evento previa notificación."
+        answer: "No hay reembolsos. Punto. Pero puedes transferir tu cupo a otro atleta de la misma categoría hasta 15 días antes del evento. Notifícanos por WhatsApp con los datos del nuevo competidor. Si no cumple los estándares, lo reubicamos."
     }
 ];
 

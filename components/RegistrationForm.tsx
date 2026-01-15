@@ -222,21 +222,9 @@ const RegistrationForm: React.FC = () => {
     setSubmitError(null);
 
     try {
-      // Final Quota Check
-      const { data: countData, error: countError } = await supabase
-        .from('registrations')
-        .select('id')
-        .eq('category', formData.category)
-        .eq('gender', formData.gender);
-
-      if (countError) throw new Error("Error verificando disponibilidad.");
-      if (countData && countData.length >= MAX_SLOTS) {
-        throw new Error("Lo sentimos, el cupo para esta categoría se acaba de agotar.");
-      }
-
       const generatedId = `DL-2026-${Math.floor(1000 + Math.random() * 9000)}`;
 
-      // 1. Upload File to Supabase Storage
+      // 1. Upload File primero (mantener igual)
       const file = formData.paymentProof!;
       const fileExt = file.name.split('.').pop();
       const fileName = `${generatedId}.${fileExt}`;
@@ -249,27 +237,31 @@ const RegistrationForm: React.FC = () => {
 
       if (uploadError) throw new Error(`Error al subir comprobante: ${uploadError.message}`);
 
-      // 2. Insert Data to Supabase Database
-      const { error: insertError } = await supabase
-        .from('registrations')
-        .insert([{
-          registration_id: generatedId,
-          full_name: formData.fullName,
-          document_id: formData.documentId,
-          age: parseInt(formData.age),
-          phone: formData.phone,
-          email: formData.email,
-          category: formData.category,
-          gender: formData.gender,
-          gym: formData.gym.trim(),
-          shirt_size: formData.shirtSize,
-          emergency_name: formData.emergencyName.trim(),
-          emergency_phone: formData.emergencyPhone,
-          payment_method: formData.paymentMethod,
-          payment_proof_path: uploadData.path
-        }]);
+      // 2. Llamar a RPC function para registro atómico
+      const { data: rpcData, error: rpcError } = await supabase.rpc('register_athlete', {
+        p_registration_id: generatedId,
+        p_full_name: formData.fullName,
+        p_document_id: formData.documentId,
+        p_age: parseInt(formData.age),
+        p_phone: formData.phone,
+        p_email: formData.email,
+        p_category: formData.category,
+        p_gender: formData.gender,
+        p_gym: formData.gym.trim(),
+        p_shirt_size: formData.shirtSize,
+        p_emergency_name: formData.emergencyName.trim(),
+        p_emergency_phone: formData.emergencyPhone,
+        p_payment_method: formData.paymentMethod,
+        p_payment_proof_path: uploadData.path
+      });
 
-      if (insertError) throw new Error(`Error al registrar datos: ${insertError.message}`);
+      if (rpcError) throw new Error(`Error al registrar: ${rpcError.message}`);
+
+      if (!rpcData.success) {
+        // Si cupo agotado, eliminar archivo subido
+        await supabase.storage.from('payment-proofs').remove([uploadData.path]);
+        throw new Error(rpcData.error);
+      }
 
       // Success
       setRegistrationId(generatedId);
@@ -448,98 +440,42 @@ const RegistrationForm: React.FC = () => {
 
           {step === 3 && (
             <div className="space-y-12 animate-fade-in">
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="bg-zinc-900/50 border-l-4 border-[#9d69ff] p-6 hover:bg-zinc-900 transition-colors">
-                  <div className="flex items-center gap-3 mb-4">
-                    <img src="/Nu.png" alt="Nu" className="w-8 h-8 object-contain" />
-                    <h6 className="font-display text-white uppercase italic">Nu Bank</h6>
-                  </div>
-                  <div className="space-y-4">
-                    <div onClick={() => copyToClipboard('53350851')} className="flex justify-between items-center cursor-pointer group/copy relative pb-4 border-b border-zinc-900/50 last:border-0">
-                      <span className="text-[10px] text-zinc-500 uppercase font-black italic">Ahorros</span>
-                      <div className="flex flex-col items-end">
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="text-white font-body tracking-widest group-hover/copy:text-primary transition-colors">53350851</span>
-                          <span className="material-symbols-outlined text-[14px] text-zinc-600 group-hover/copy:text-primary transition-colors">content_copy</span>
-                        </div>
-                        <span className="text-[7px] text-primary font-black uppercase tracking-[0.2em] opacity-100 md:opacity-0 md:group-hover/copy:opacity-100 transition-opacity absolute bottom-0 right-0">Toca para copiar</span>
-                      </div>
-                    </div>
-                    <div onClick={() => copyToClipboard('@WRV034')} className="flex justify-between items-center cursor-pointer group/copy relative pb-4 border-b border-zinc-900/50 last:border-0">
-                      <span className="text-[10px] text-zinc-500 uppercase font-black italic">Llave Nu</span>
-                      <div className="flex flex-col items-end">
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="text-white font-body tracking-widest group-hover/copy:text-primary transition-colors">@WRV034</span>
-                          <span className="material-symbols-outlined text-[14px] text-zinc-600 group-hover/copy:text-primary transition-colors">content_copy</span>
-                        </div>
-                        <span className="text-[7px] text-primary font-black uppercase tracking-[0.2em] opacity-100 md:opacity-0 md:group-hover/copy:opacity-100 transition-opacity absolute bottom-0 right-0">Toca para copiar</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-zinc-900/50 border-l-4 border-white p-6 hover:bg-zinc-900 transition-colors relative group">
-                  <div className="flex items-center gap-3 mb-4">
-                    <img src="/nequi.png" alt="Nequi" className="w-8 h-8 object-contain" />
-                    <h6 className="font-display text-white uppercase italic">Nequi</h6>
-                  </div>
-                  <div onClick={() => copyToClipboard('3136336446')} className="flex justify-between items-center cursor-pointer group/copy mb-2 relative pb-4">
-                    <span className="text-[10px] text-zinc-500 uppercase font-black italic">Celular</span>
-                    <div className="flex flex-col items-end">
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="text-white font-body tracking-widest group-hover/copy:text-primary transition-colors">313 633 6446</span>
-                        <span className="material-symbols-outlined text-[14px] text-zinc-600 group-hover/copy:text-primary transition-colors">content_copy</span>
-                      </div>
-                      <span className="text-[7px] text-primary font-black uppercase tracking-[0.2em] opacity-100 md:opacity-0 md:group-hover/copy:opacity-100 transition-opacity absolute bottom-0 right-0">Toca para copiar</span>
-                    </div>
-                  </div>
-                  <div className="text-[9px] text-zinc-600 uppercase font-bold tracking-[0.2em] text-center bg-black/50 py-1">Titular: William Reyes V.</div>
-                </div>
+              <div className="bg-zinc-900 border-l-4 border-primary p-6">
+                <h6 className="font-display text-white uppercase text-xl mb-2">¿Ya realizaste tu pago?</h6>
+                <p className="text-zinc-400 text-xs leading-relaxed mb-4">
+                  Si completaste la transferencia, adjunta tu comprobante abajo.
+                  Validamos pagos en 24-48 horas hábiles.
+                </p>
+                <p className="text-[10px] text-primary font-black uppercase tracking-widest bg-primary/10 p-2 inline-block">
+                  ⚠️ Comprobantes falsos o alterados = descalificación inmediata sin reembolso
+                </p>
               </div>
 
-              <div className="grid lg:grid-cols-2 gap-12">
-                <div className="space-y-6 text-center">
-                  <div className="bg-white p-3 rounded shadow-2xl relative group/qr transform -rotate-1 hover:rotate-0 transition-transform max-w-[200px] mx-auto">
-                    <img src="/qr nequi.jpeg" alt="QR Nequi" className="w-full h-auto" />
-                    <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover/qr:opacity-100 transition-opacity flex items-center justify-center p-4">
-                      <span className="bg-black text-white text-[10px] font-black uppercase px-4 py-2 text-center leading-tight">Escanea desde tu <br /> app nequi</span>
-                    </div>
-                  </div>
-                  <div className="bg-primary/5 border border-primary/20 p-6">
-                    <p className="text-zinc-500 text-[10px] uppercase font-black tracking-widest mb-1 leading-none">Total Inscripción</p>
-                    <p className="text-white font-display text-4xl tracking-tighter">{currentPrice}</p>
-                  </div>
+              <div
+                onClick={() => fileInputRef.current?.click()}
+                className={`h-48 bg-black border-2 border-dashed ${errors.paymentProof ? 'border-primary' : 'border-zinc-800 hover:border-zinc-600'} flex flex-col items-center justify-center cursor-pointer transition-all group`}
+              >
+                <input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" accept=".jpg,.jpeg,.png,.pdf" />
+                <span className="material-symbols-outlined text-4xl text-zinc-700 group-hover:text-primary transition-colors mb-2">cloud_upload</span>
+                <p className="text-[10px] text-zinc-500 uppercase font-bold tracking-widest text-center px-4 leading-relaxed">
+                  {formData.paymentProof ? formData.paymentProof.name : "Subir comprobante (PNG, JPG o PDF)"}
+                </p>
+                <p className="text-[9px] text-zinc-700 uppercase font-black tracking-widest mt-2">Máximo 5MB</p>
+              </div>
+
+              <div
+                onClick={() => !formData.termsAccepted && setShowWaiver(true)}
+                className={`flex items-center gap-4 p-4 border transition-colors cursor-pointer ${errors.termsAccepted ? 'bg-primary/10 border-primary' : 'bg-zinc-900/30 border-zinc-800 hover:border-zinc-700'
+                  }`}
+              >
+                <div className={`w-6 h-6 border flex items-center justify-center transition-colors ${formData.termsAccepted ? 'bg-primary border-primary' : 'bg-black border-zinc-700'
+                  }`}>
+                  {formData.termsAccepted && <span className="material-symbols-outlined text-black text-sm font-bold">check</span>}
                 </div>
-
-                <div className="space-y-6">
-                  <InputGroup label="Adjuntar Comprobante" error={errors.paymentProof}>
-                    <div
-                      onClick={() => fileInputRef.current?.click()}
-                      className={`h-48 bg-black border-2 border-dashed ${errors.paymentProof ? 'border-primary' : 'border-zinc-800 hover:border-zinc-600'} flex flex-col items-center justify-center cursor-pointer transition-all group`}
-                    >
-                      <input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" accept=".jpg,.jpeg,.png,.pdf" />
-                      <span className="material-symbols-outlined text-4xl text-zinc-700 group-hover:text-primary transition-colors mb-2">cloud_upload</span>
-                      <p className="text-[10px] text-zinc-500 uppercase font-bold tracking-widest text-center px-4 leading-relaxed">
-                        {formData.paymentProof ? formData.paymentProof.name : "Subir comprobante (PNG, JPG o PDF)"}
-                      </p>
-                    </div>
-                  </InputGroup>
-                  <div
-                    onClick={() => !formData.termsAccepted && setShowWaiver(true)}
-                    className={`flex items-center gap-4 p-3 border transition-colors cursor-pointer ${errors.termsAccepted ? 'bg-primary/10 border-primary' : 'bg-zinc-900/30 border-zinc-800 hover:border-zinc-700'
-                      }`}
-                  >
-                    <div className={`w-5 h-5 border flex items-center justify-center transition-colors ${formData.termsAccepted ? 'bg-primary border-primary' : 'bg-black border-zinc-700'
-                      }`}>
-                      {formData.termsAccepted && <span className="material-symbols-outlined text-black text-sm font-bold">check</span>}
-                    </div>
-
-                    <div className="flex-1">
-                      <p className={`text-[10px] uppercase font-black tracking-widest leading-tight ${errors.termsAccepted ? 'text-primary' : 'text-zinc-500'}`}>
-                        He leído y acepto el <span className="text-white underline decoration-primary underline-offset-4">Deslinde de Responsabilidad</span>
-                      </p>
-                    </div>
-                  </div>
+                <div className="flex-1">
+                  <p className={`text-[10px] uppercase font-black tracking-widest leading-tight ${errors.termsAccepted ? 'text-primary' : 'text-zinc-500'}`}>
+                    He leído y acepto el <span className="text-white underline decoration-primary underline-offset-4">Deslinde de Responsabilidad</span>
+                  </p>
                 </div>
               </div>
 
@@ -614,22 +550,75 @@ const RegistrationForm: React.FC = () => {
               </button>
             </div>
             <div className="p-8 overflow-y-auto flex-1 font-body text-zinc-400 text-sm leading-relaxed space-y-4">
-              <p className="font-bold text-white uppercase tracking-widest">DARE LEAGUE 2026 - ACUERDO DE PARTICIPACIÓN</p>
-              <p>
-                Yo, al inscribirme en este evento, reconozco voluntariamente que la participación en DARE LEAGUE implica actividad física extenuante y conlleva riesgos inherentes de lesiones físicas, incluyendo pero no limitado a: paros cardíacos, esguinces, fracturas, y en casos extremos, la muerte.
-              </p>
-              <p>
-                Declaro que estoy en buenas condiciones físicas y mentales para participar en este evento y que no tengo ninguna condición médica que me impida hacerlo de manera segura.
-              </p>
-              <p>
-                Asumo total responsabilidad por cualquier lesión o daño que pueda sufrir durante el evento. Libero de toda responsabilidad a los organizadores, patrocinadores, voluntarios y dueños del recinto (Box Coach Pipe Rubio) por cualquier reclamo, demanda o acción legal que pueda surgir de mi participación.
-              </p>
-              <p>
-                Entiendo y acepto que el valor de la inscripción <strong>NO ES REEMBOLSABLE</strong> bajo ninguna circunstancia, incluyendo lesiones previas al evento o descalificación por no cumplir los estándares.
-              </p>
-              <p>
-                Autorizo el uso de mi imagen (fotografías y video) capturada durante el evento para fines promocionales de DARE LEAGUE sin compensación alguna.
-              </p>
+              <p className="font-bold text-white uppercase tracking-widest">DARE LEAGUE 2026 - DESLINDE DE RESPONSABILIDAD</p>
+
+              <p className="mb-4">Al inscribirme, acepto que:</p>
+
+              <div className="space-y-4">
+                <div className="flex gap-4">
+                  <span className="text-primary font-bold">✓</span>
+                  <div>
+                    <strong className="text-white block uppercase text-xs tracking-widest mb-1">Riesgos físicos</strong>
+                    Reconozco que CrossFit implica actividad física extenuante con riesgo de lesiones (esguinces, fracturas, problemas cardíacos, incluso muerte).
+                  </div>
+                </div>
+
+                <div className="flex gap-4">
+                  <span className="text-primary font-bold">✓</span>
+                  <div>
+                    <strong className="text-white block uppercase text-xs tracking-widest mb-1">Condición médica</strong>
+                    Estoy en condiciones físicas y mentales para competir. No tengo condiciones médicas que me impidan participar de manera segura.
+                  </div>
+                </div>
+
+                <div className="flex gap-4">
+                  <span className="text-primary font-bold">✓</span>
+                  <div>
+                    <strong className="text-white block uppercase text-xs tracking-widest mb-1">Responsabilidad personal</strong>
+                    Asumo total responsabilidad por cualquier lesión. Libero de toda responsabilidad a organizadores, patrocinadores, voluntarios y dueños del recinto (Box Coach Pipe Rubio).
+                  </div>
+                </div>
+
+                <div className="flex gap-4">
+                  <span className="text-primary font-bold">✓</span>
+                  <div>
+                    <strong className="text-white block uppercase text-xs tracking-widest mb-1">Sin reembolsos</strong>
+                    Entiendo que la inscripción NO ES REEMBOLSABLE bajo ninguna circunstancia. Puedo transferir mi cupo a otro atleta hasta 15 días antes del evento.
+                  </div>
+                </div>
+
+                <div className="flex gap-4">
+                  <span className="text-primary font-bold">✓</span>
+                  <div>
+                    <strong className="text-white block uppercase text-xs tracking-widest mb-1">Uso de imagen</strong>
+                    Autorizo el uso de fotografías y videos capturados durante el evento para promoción de Dare League sin compensación.
+                  </div>
+                </div>
+
+                <div className="flex gap-4">
+                  <span className="text-primary font-bold">✓</span>
+                  <div>
+                    <strong className="text-white block uppercase text-xs tracking-widest mb-1">Reubicación</strong>
+                    La organización puede reubicarme de categoría si no cumplo los estándares publicados. Esto protege la integridad de la competencia.
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-8 pt-8 border-t border-zinc-900">
+                <details className="group">
+                  <summary className="cursor-pointer text-xs font-bold text-zinc-500 uppercase tracking-widest hover:text-white transition-colors list-none flex items-center gap-2">
+                    <span className="material-symbols-outlined text-sm group-open:rotate-180 transition-transform">expand_more</span>
+                    Ver texto legal completo
+                  </summary>
+                  <div className="mt-4 text-xs text-zinc-600 space-y-2 pl-6">
+                    <p>Yo, al inscribirme en este evento, reconozco voluntariamente que la participación en DARE LEAGUE implica actividad física extenuante y conlleva riesgos inherentes de lesiones físicas, incluyendo pero no limitado a: paros cardíacos, esguinces, fracturas, y en casos extremos, la muerte.</p>
+                    <p>Declaro que estoy en buenas condiciones físicas y mentales para participar en este evento y que no tengo ninguna condición médica que me impida hacerlo de manera segura.</p>
+                    <p>Asumo total responsabilidad por cualquier lesión o daño que pueda sufrir durante el evento. Libero de toda responsabilidad a los organizadores, patrocinadores, voluntarios y dueños del recinto (Box Coach Pipe Rubio) por cualquier reclamo, demanda o acción legal que pueda surgir de mi participación.</p>
+                    <p>Entiendo y acepto que el valor de la inscripción NO ES REEMBOLSABLE bajo ninguna circunstancia, incluyendo lesiones previas al evento o descalificación por no cumplir los estándares. Puedo transferir mi cupo a otro atleta de la misma categoría hasta 15 días antes del evento mediante notificación por WhatsApp.</p>
+                    <p>Autorizo el uso de mi imagen (fotografías y video) capturada durante el evento para fines promocionales de DARE LEAGUE sin compensación alguna.</p>
+                  </div>
+                </details>
+              </div>
             </div>
             <div className="p-6 border-t border-zinc-900 bg-zinc-900/30">
               <button
