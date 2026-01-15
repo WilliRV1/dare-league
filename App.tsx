@@ -6,6 +6,7 @@ import AdminView from './components/AdminView';
 import AthleteWall from './components/AthleteWall';
 import RegistrationStatus from './components/RegistrationStatus';
 import FAQ from './components/FAQ';
+import Prizes from './components/Prizes';
 import { CATEGORIES, MAX_SLOTS_PER_CATEGORY, PRICING_TIERS } from './constants';
 import { supabase } from './supabaseClient';
 
@@ -70,7 +71,7 @@ function App() {
       setIsScrolled(window.scrollY > 50);
 
       // Scrollspy Logic
-      const sections = ['competition', 'categories', 'bracket', 'pricing', 'payment-info', 'register'];
+      const sections = ['competition', 'categories', 'prizes', 'bracket', 'pricing', 'payment-info', 'register'];
       // Offset matches the scroll-margin-top + visual comfort zone
       const scrollPosition = window.scrollY + 150;
 
@@ -173,6 +174,13 @@ function App() {
               className={`transition-colors duration-300 ${activeSection === 'categories' ? 'text-primary scale-110 font-bold drop-shadow-sm' : 'text-zinc-400 hover:text-white'}`}
             >
               Categorías
+            </a>
+            <a
+              href="#prizes"
+              onClick={(e) => scrollToSection(e, 'prizes')}
+              className={`transition-colors duration-300 ${activeSection === 'prizes' ? 'text-primary scale-110 font-bold drop-shadow-sm' : 'text-zinc-400 hover:text-white'}`}
+            >
+              Premios
             </a>
             <a
               href="#bracket"
@@ -375,6 +383,9 @@ function App() {
         </div>
       </section>
 
+      {/* Prizes Section */}
+      <Prizes />
+
       <AthleteWall />
 
       {/* Bracket Section (Locked) */}
@@ -430,7 +441,12 @@ function App() {
                 </div>
                 <div className="flex justify-between items-center border-b border-zinc-800 pb-2">
                   <span className="text-zinc-500 text-xs font-black uppercase tracking-widest">Número</span>
-                  <span className="text-white font-body tracking-wider text-xl">53350851</span>
+                  <span className="text-white font-body tracking-wider text-xl flex items-center gap-2">
+                    53350851
+                    <button onClick={() => { navigator.clipboard.writeText('53350851'); alert('Copiado'); }} className="text-zinc-500 hover:text-white transition-colors">
+                      <span className="material-symbols-outlined text-sm">content_copy</span>
+                    </button>
+                  </span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-zinc-500 text-xs font-black uppercase tracking-widest">Llave Nu</span>
@@ -448,7 +464,12 @@ function App() {
               <div className="space-y-4">
                 <div className="flex justify-between items-center border-b border-zinc-800 pb-2">
                   <span className="text-zinc-500 text-xs font-black uppercase tracking-widest">Celular</span>
-                  <span className="text-white font-body tracking-wider text-xl">313 633 6446</span>
+                  <span className="text-white font-body tracking-wider text-xl flex items-center gap-2">
+                    313 633 6446
+                    <button onClick={() => { navigator.clipboard.writeText('3136336446'); alert('Copiado'); }} className="text-zinc-500 hover:text-white transition-colors">
+                      <span className="material-symbols-outlined text-sm">content_copy</span>
+                    </button>
+                  </span>
                 </div>
                 <div className="flex justify-center pt-2">
                   <img src="/qr nequi.jpeg" alt="QR Nequi" className="w-32 h-32 object-contain mix-blend-screen opacity-80" />
