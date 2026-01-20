@@ -3,7 +3,7 @@
 
 CREATE OR REPLACE FUNCTION register_athlete(
   p_registration_id TEXT,
-  p_full_name TEXT,
+  p_full_name TEXT,     
   p_document_id TEXT,
   p_age INTEGER,
   p_phone TEXT,

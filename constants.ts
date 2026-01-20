@@ -2,7 +2,7 @@ import { PricingStage, PricingTier } from './types';
 
 // Event Date: July 18-20, 2026
 export const EVENT_START_DATE = new Date(2026, 6, 18, 8, 0, 0);
-export const REGISTRATION_OPEN_DATE = new Date(2026, 0, 15); // Jan 15
+export const REGISTRATION_OPEN_DATE = new Date(2026, 1, 15); // Feb 15
 
 export const MAX_SLOTS_PER_CATEGORY = 32;
 
@@ -12,8 +12,8 @@ export const PRICING_TIERS: PricingTier[] = [
     name: "ETAPA 1",
     price: 170000,
     formattedPrice: "$170.000",
-    startDate: new Date(2026, 0, 15), // Jan 15
-    endDate: new Date(2026, 2, 15, 23, 59, 59), // Mar 15
+    startDate: new Date(2026, 1, 15), // Feb 15
+    endDate: new Date(2026, 3, 15, 23, 59, 59), // Apr 15
     features: ["KIT OFICIAL COMPLETO", "ACCESO BRACKET 1V1", "SEGURO DE ATLETA"]
   },
   {
@@ -21,8 +21,8 @@ export const PRICING_TIERS: PricingTier[] = [
     name: "ETAPA 2",
     price: 195000,
     formattedPrice: "$195.000",
-    startDate: new Date(2026, 2, 16), // Mar 16
-    endDate: new Date(2026, 4, 31, 23, 59, 59), // May 31
+    startDate: new Date(2026, 3, 16), // Apr 16
+    endDate: new Date(2026, 5, 30, 23, 59, 59), // June 30
     features: ["KIT OFICIAL COMPLETO", "ACCESO BRACKET 1V1", "SEGURO DE ATLETA"]
   },
   {
@@ -30,8 +30,8 @@ export const PRICING_TIERS: PricingTier[] = [
     name: "ETAPA 3",
     price: 210000,
     formattedPrice: "$210.000",
-    startDate: new Date(2026, 5, 1), // Jun 1
-    endDate: new Date(2026, 6, 10, 23, 59, 59), // July 10
+    startDate: new Date(2026, 6, 1), // July 1
+    endDate: new Date(2026, 7, 10, 23, 59, 59), // Aug 10
     features: ["KIT OFICIAL COMPLETO", "ACCESO BRACKET 1V1", "SEGURO DE ATLETA"]
   }
 ];
@@ -40,7 +40,7 @@ export const CATEGORIES = [
   {
     id: 'PRINCIPIANTE',
     title: 'PRINCIPIANTE',
-    description: 'Si entrenas hace menos de 2 años o necesitas banda para pull-ups. Aquí empiezas a competir de verdad, no solo a entrenar.',
+    description: 'Entrenas hace menos de 2 años o usas banda en Pull-ups. Deja de solo "ir a clase" y empieza a competir de verdad. Tu puerta de entrada al mundo competitivo.',
     standards: [
       { exercise: 'Pull Ups', male: 'Banda', female: 'Banda' },
       { exercise: 'Snatch', male: '75 lb', female: '45 lb' },
@@ -54,7 +54,7 @@ export const CATEGORIES = [
   {
     id: 'INTERMEDIO',
     title: 'INTERMEDIO',
-    description: 'Dominas snatch y clean & jerk sin asistencia. Pull-ups estrictos. T2B sin romper forma. El nivel donde la técnica separa a los que entrenan de los que compiten.',
+    description: 'Dominas Snatch y Clean & Jerk sin asistencia. Pull-ups estrictos y T2B fluidos. El punto exacto donde la técnica separa al aficionado del atleta.',
     standards: [
       { exercise: 'Pull Ups', male: 'Si', female: 'Banda' },
       { exercise: 'Snatch', male: '95 lb', female: '55 lb' },

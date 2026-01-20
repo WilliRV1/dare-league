@@ -298,8 +298,8 @@ function App() {
               El <span className="text-primary italic">Underground</span> <br />Del CrossFit
             </h2>
             <div className="space-y-6 text-zinc-400 text-lg font-body leading-relaxed border-l-4 border-primary pl-8">
-              <p>No hay equipos. No hay donde esconderse. Es tu técnica contra la suya. Tu resistencia contra la suya. Tu voluntad contra la suya.</p>
-              <p>Formato de eliminación directa. Ganas y avanzas. Pierdes y se acabó. La competencia más cruda diseñada para elevar a los atletas de Cali al siguiente nivel.</p>
+              <p><strong className="text-white">No hay equipos</strong>. <strong className="text-white">No hay donde esconderse</strong>. Es tu técnica contra la suya. Tu resistencia contra la suya. Tu voluntad contra la suya.</p>
+              <p>Formato de eliminación directa. <strong className="text-white">Ganas y avanzas</strong>. <strong className="text-white">Pierdes y se acabó</strong>. La competencia más cruda diseñada para elevar a los atletas de Cali al siguiente nivel.</p>
             </div>
           </div>
 

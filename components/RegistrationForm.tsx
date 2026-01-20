@@ -326,8 +326,19 @@ const RegistrationForm: React.FC = () => {
   return (
     <div className="bg-zinc-950 border border-zinc-900 shadow-2xl relative overflow-hidden">
       {!isFormEnabled && (
-        <div className="absolute inset-0 bg-black/80 z-50 flex items-center justify-center backdrop-blur-sm">
-          <h3 className="font-display text-4xl text-white uppercase tracking-tighter">Inscripciones Cerradas</h3>
+        <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-black/90 backdrop-blur-sm p-6 text-center">
+          <h3 className="font-display text-5xl md:text-6xl text-white uppercase tracking-tighter mb-4">Fase de Expectativa</h3>
+          <p className="text-zinc-400 uppercase tracking-widest text-sm md:text-base font-bold mb-8">
+            Las puertas se abren el 15 de Febrero. Los cupos son limitados.
+          </p>
+          <a
+            href="https://chat.whatsapp.com/LINK_PENDIENTE"
+            target="_blank"
+            rel="noreferrer"
+            className="bg-primary text-white font-display uppercase tracking-widest px-8 py-4 hover:bg-white hover:text-black transition-all shadow-lg text-lg"
+          >
+            Unirme a la Lista de Espera
+          </a>
         </div>
       )}
 
