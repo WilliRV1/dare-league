@@ -14,7 +14,7 @@ export const PRICING_TIERS: PricingTier[] = [
     formattedPrice: "$170.000",
     startDate: new Date(2026, 1, 15), // Feb 15
     endDate: new Date(2026, 3, 15, 23, 59, 59), // Apr 15
-    features: ["KIT OFICIAL COMPLETO", "ACCESO BRACKET 1V1", "SEGURO DE ATLETA"]
+    features: ["KIT OFICIAL COMPLETO", "ACCESO BRACKET 1V1"]
   },
   {
     id: PricingStage.REGULAR,
@@ -23,7 +23,7 @@ export const PRICING_TIERS: PricingTier[] = [
     formattedPrice: "$195.000",
     startDate: new Date(2026, 3, 16), // Apr 16
     endDate: new Date(2026, 5, 30, 23, 59, 59), // June 30
-    features: ["KIT OFICIAL COMPLETO", "ACCESO BRACKET 1V1", "SEGURO DE ATLETA"]
+    features: ["KIT OFICIAL COMPLETO", "ACCESO BRACKET 1V1"]
   },
   {
     id: PricingStage.LATE,
@@ -32,7 +32,7 @@ export const PRICING_TIERS: PricingTier[] = [
     formattedPrice: "$210.000",
     startDate: new Date(2026, 6, 1), // July 1
     endDate: new Date(2026, 7, 10, 23, 59, 59), // Aug 10
-    features: ["KIT OFICIAL COMPLETO", "ACCESO BRACKET 1V1", "SEGURO DE ATLETA"]
+    features: ["KIT OFICIAL COMPLETO", "ACCESO BRACKET 1V1"]
   }
 ];
 
@@ -40,7 +40,7 @@ export const CATEGORIES = [
   {
     id: 'PRINCIPIANTE',
     title: 'PRINCIPIANTE',
-    description: 'Entrenas hace menos de 2 años o usas banda en Pull-ups. Deja de solo "ir a clase" y empieza a competir de verdad. Tu puerta de entrada al mundo competitivo.',
+    description: 'Perfecto para entrar al mundo competitivo de este deporte',
     standards: [
       { exercise: 'Pull Ups', male: 'Banda', female: 'Banda' },
       { exercise: 'Snatch', male: '75 lb', female: '45 lb' },
@@ -54,7 +54,7 @@ export const CATEGORIES = [
   {
     id: 'INTERMEDIO',
     title: 'INTERMEDIO',
-    description: 'Dominas Snatch y Clean & Jerk sin asistencia. Pull-ups estrictos y T2B fluidos. El punto exacto donde la técnica separa al aficionado del atleta.',
+    description: 'El punto exacto donde la técnica separa al aficionado del atleta.',
     standards: [
       { exercise: 'Pull Ups', male: 'Si', female: 'Banda' },
       { exercise: 'Snatch', male: '95 lb', female: '55 lb' },

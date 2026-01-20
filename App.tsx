@@ -299,7 +299,7 @@ function App() {
             </h2>
             <div className="space-y-6 text-zinc-400 text-lg font-body leading-relaxed border-l-4 border-primary pl-8">
               <p><strong className="text-white">No hay equipos</strong>. <strong className="text-white">No hay donde esconderse</strong>. Es tu técnica contra la suya. Tu resistencia contra la suya. Tu voluntad contra la suya.</p>
-              <p>Formato de eliminación directa. <strong className="text-white">Ganas y avanzas</strong>. <strong className="text-white">Pierdes y se acabó</strong>. La competencia más cruda diseñada para elevar a los atletas de Cali al siguiente nivel.</p>
+              <p>Formato de eliminación directa. <strong className="text-white">Ganas y avanzas</strong>.</p>
             </div>
           </div>
 
@@ -406,7 +406,7 @@ function App() {
           <div className="text-center mb-16">
             <h2 className="font-display text-6xl md:text-8xl uppercase mb-4 text-white">Tarifas</h2>
             <div className="text-primary font-black uppercase tracking-[0.2em] text-sm italic space-y-2">
-              <p>Kit oficial completo, bracket 1v1, seguro médico y tu nombre en el muro de atletas.</p>
+              <p>Kit oficial completo, bracket 1v1.</p>
               <p>Esto no es una carrera de 5K. El precio refleja el nivel.</p>
             </div>
           </div>
@@ -572,7 +572,7 @@ function App() {
           </div>
 
           <div className="flex flex-wrap justify-center gap-8 md:gap-16 mb-16 font-display text-sm tracking-widest text-zinc-500 uppercase">
-            <a href="https://www.instagram.com/dareleague2025/" target="_blank" rel="noreferrer" className="hover:text-white transition-colors">Instagram</a>
+            <a href="https://www.instagram.com/dare_league2026/" target="_blank" rel="noreferrer" className="hover:text-white transition-colors">Instagram</a>
             <a href="https://wa.me/573136336446" target="_blank" rel="noreferrer" className="hover:text-white transition-colors">WhatsApp</a>
             <a href="#" className="hover:text-white transition-colors">Reglamento</a>
             <a href="https://www.instagram.com/coach.piperubio/" target="_blank" rel="noreferrer" className="hover:text-white transition-colors italic text-[10px] font-black tracking-[.2em] self-center">COACH PIPE RUBIO</a>
@@ -597,7 +597,7 @@ function App() {
           onClick={(e) => scrollToSection(e, 'register')}
           className="block w-full bg-primary text-white font-display text-center uppercase tracking-widest py-4 text-xl shadow-[0_0_20px_rgba(239,53,61,0.3)]"
         >
-          Inscribirme Ya
+          UNIRME A LA ESPERA
         </a>
       </div>
 

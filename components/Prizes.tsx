@@ -51,9 +51,7 @@ const Prizes: React.FC = () => {
                 </div>
 
                 <div className="mt-12 text-center">
-                    <p className="text-zinc-600 text-[10px] uppercase font-black tracking-widest">
-                        * Premios sujetos a retenciones legales y cumplimiento de cupos mínimos por categoría.
-                    </p>
+                    * Premios sujetos a cumplimiento de cupos mínimos por categoría.
                 </div>
             </div>
         </section>

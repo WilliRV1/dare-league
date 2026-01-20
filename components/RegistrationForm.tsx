@@ -332,7 +332,7 @@ const RegistrationForm: React.FC = () => {
             Las puertas se abren el 15 de Febrero. Los cupos son limitados.
           </p>
           <a
-            href="https://chat.whatsapp.com/LINK_PENDIENTE"
+            href="https://chat.whatsapp.com/E5gExvqv33GLwccEo8cUR3"
             target="_blank"
             rel="noreferrer"
             className="bg-primary text-white font-display uppercase tracking-widest px-8 py-4 hover:bg-white hover:text-black transition-all shadow-lg text-lg"
