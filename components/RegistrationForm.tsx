@@ -96,9 +96,9 @@ const RegistrationForm: React.FC = () => {
       if (!formData.email.trim()) newErrors.email = "Requerido";
       else if (!emailRegex.test(formData.email)) newErrors.email = "Email inválido";
 
-      const phoneRegex = /^[0-9]+$/;
+      const phoneRegex = /^[\d\s\+\-\(\)]+$/;
       if (!formData.phone.trim()) newErrors.phone = "Requerido";
-      else if (!phoneRegex.test(formData.phone)) newErrors.phone = "Solo números";
+      else if (!phoneRegex.test(formData.phone)) newErrors.phone = "Formato inválido";
     }
 
     if (currentStep === 2) {

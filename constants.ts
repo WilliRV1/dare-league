@@ -31,7 +31,7 @@ export const PRICING_TIERS: PricingTier[] = [
     price: 210000,
     formattedPrice: "$210.000",
     startDate: new Date(2026, 6, 1), // July 1
-    endDate: new Date(2026, 7, 10, 23, 59, 59), // Aug 10
+    endDate: new Date(2026, 6, 15, 23, 59, 59), // July 15
     features: ["KIT OFICIAL COMPLETO", "ACCESO BRACKET 1V1"]
   }
 ];
