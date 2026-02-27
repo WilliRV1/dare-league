@@ -701,7 +701,7 @@ function App() {
           onClick={(e) => scrollToSection(e, 'register')}
           className="block w-full bg-primary text-white font-display text-center uppercase tracking-widest py-4 text-xl shadow-[0_0_20px_rgba(239,53,61,0.3)]"
         >
-          UNIRME A LA ESPERA
+          INSCRIBIRME
         </a>
       </div>
 
