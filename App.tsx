@@ -440,10 +440,10 @@ function App() {
           </div>
 
           <div className="flex flex-col md:flex-row items-center md:items-start gap-12 justify-center">
-            {/* Reel embed */}
-            <div className="w-full max-w-[340px] flex-shrink-0 shadow-[0_0_60px_rgba(239,53,61,0.15)] border border-zinc-900 overflow-hidden">
+            {/* Reel embed — gradient overlays blend white Instagram chrome into page bg */}
+            <div className="relative w-full max-w-[340px] flex-shrink-0 shadow-[0_0_80px_rgba(239,53,61,0.25)] overflow-hidden bg-zinc-950">
               <iframe
-                src="https://www.instagram.com/reel/DTgVVrwEuAp/embed/"
+                src="https://www.instagram.com/reel/DUn8RhpAIO_/embed/"
                 width="340"
                 style={{ height: '600px', display: 'block' }}
                 frameBorder="0"
@@ -453,6 +453,10 @@ function App() {
                 loading="lazy"
                 title="Dare League — El Escenario"
               />
+              {/* Top overlay: cubre el header blanco de Instagram */}
+              <div className="absolute top-0 left-0 right-0 h-20 bg-gradient-to-b from-zinc-950 via-zinc-950/80 to-transparent pointer-events-none" />
+              {/* Bottom overlay: cubre el footer blanco de Instagram */}
+              <div className="absolute bottom-0 left-0 right-0 h-28 bg-gradient-to-t from-zinc-950 via-zinc-950/80 to-transparent pointer-events-none" />
             </div>
 
             {/* Copy + CTA */}
