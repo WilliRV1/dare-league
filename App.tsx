@@ -7,6 +7,7 @@ import AthleteWall from './components/AthleteWall';
 import RegistrationStatus from './components/RegistrationStatus';
 import FAQ from './components/FAQ';
 import Prizes from './components/Prizes';
+import WhatsAppButton from './components/WhatsAppButton';
 import { CATEGORIES, MAX_SLOTS_PER_CATEGORY, PRICING_TIERS } from './constants';
 import { supabase } from './supabaseClient';
 
@@ -29,6 +30,7 @@ function App() {
   const [categoryCounts, setCategoryCounts] = useState<Record<string, number>>({});
   const [showStatusCheck, setShowStatusCheck] = useState(false);
   const [currentPrice, setCurrentPrice] = useState<string>('');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     // Check for obscure admin route (Hardening)
@@ -95,6 +97,7 @@ function App() {
 
   const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     e.preventDefault();
+    setIsMobileMenuOpen(false);
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
@@ -160,6 +163,18 @@ function App() {
             />
             <span className="font-display text-2xl md:text-3xl uppercase tracking-tighter text-white group-hover:text-zinc-300 transition-colors">Dare <span className="text-primary">League</span></span>
           </div>
+          {/* Hamburger button — mobile only */}
+          <button
+            onClick={() => setIsMobileMenuOpen(prev => !prev)}
+            aria-label="Abrir menú"
+            aria-expanded={isMobileMenuOpen}
+            className="md:hidden flex flex-col items-center justify-center w-10 h-10 gap-[6px] group z-[70] relative"
+          >
+            <span className={`block h-[2px] w-6 bg-white transition-all duration-300 origin-center ${isMobileMenuOpen ? 'rotate-45 translate-y-[8px]' : ''}`} />
+            <span className={`block h-[2px] w-6 bg-white transition-all duration-300 ${isMobileMenuOpen ? 'opacity-0 scale-x-0' : ''}`} />
+            <span className={`block h-[2px] w-6 bg-white transition-all duration-300 origin-center ${isMobileMenuOpen ? '-rotate-45 -translate-y-[8px]' : ''}`} />
+          </button>
+
           <div className="hidden md:flex gap-8 font-display text-sm tracking-widest uppercase">
             <a
               href="#competition"
@@ -591,7 +606,7 @@ function App() {
       </footer>
 
       {/* Mobile Sticky CTA */}
-      <div className="md:hidden fixed bottom-0 left-0 w-full z-50 bg-black/90 backdrop-blur border-t border-primary/30 p-4">
+      <div className="md:hidden fixed bottom-0 left-0 w-full z-50 bg-black/90 backdrop-blur border-t border-primary/30 p-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
         <a
           href="#register"
           onClick={(e) => scrollToSection(e, 'register')}
@@ -600,6 +615,59 @@ function App() {
           UNIRME A LA ESPERA
         </a>
       </div>
+
+      {/* Mobile Menu Overlay */}
+      <div
+        className={`
+          md:hidden fixed inset-0 z-[65] flex flex-col bg-black/98 backdrop-blur-md
+          transition-all duration-300 ease-in-out
+          ${isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}
+        `}
+      >
+        {/* Top bar spacer */}
+        <div className="h-20" />
+
+        <nav className="flex-1 flex flex-col justify-center px-8 gap-1">
+          {[
+            { id: 'competition', label: 'La Liga' },
+            { id: 'categories', label: 'Categorías' },
+            { id: 'prizes', label: 'Premios' },
+            { id: 'bracket', label: 'Bracket' },
+            { id: 'pricing', label: 'Precios' },
+            { id: 'payment-info', label: 'Pago' },
+            { id: 'register', label: 'Registro' },
+          ].map(({ id, label }) => (
+            <a
+              key={id}
+              href={`#${id}`}
+              onClick={(e) => scrollToSection(e, id)}
+              className={`
+                font-display text-5xl uppercase tracking-tighter leading-tight py-2
+                transition-colors duration-200
+                ${activeSection === id ? 'text-primary' : 'text-zinc-600 hover:text-white'}
+              `}
+            >
+              {label}
+            </a>
+          ))}
+        </nav>
+
+        <div className="px-8 pb-36">
+          <button
+            onClick={() => { setIsMobileMenuOpen(false); setShowStatusCheck(true); }}
+            className="flex items-center gap-3 text-zinc-500 hover:text-white transition-colors font-display text-sm uppercase tracking-widest"
+          >
+            <span className="material-symbols-outlined text-base text-primary">search</span>
+            Consultar Mi Estado
+          </button>
+          <p className="text-zinc-800 text-[10px] font-black uppercase tracking-widest mt-6">
+            Dare League 2026 · Cali, Colombia
+          </p>
+        </div>
+      </div>
+
+      {/* Floating WhatsApp Button */}
+      <WhatsAppButton />
 
       {showStatusCheck && <RegistrationStatus onClose={() => setShowStatusCheck(false)} />}
 

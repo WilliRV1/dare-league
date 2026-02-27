@@ -361,13 +361,15 @@ const AdminView: React.FC = () => {
                                             </div>
                                         </div>
 
-                                        <div className="scale-[0.22] origin-top-left -mb-[840px] shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
-                                            <div ref={flyerRef}>
-                                                <AthleteFlyer
-                                                    name={selectedAthlete.full_name}
-                                                    category={selectedAthlete.category}
-                                                    gender={selectedAthlete.gender}
-                                                />
+                                        <div className="relative w-full overflow-hidden" style={{ height: '238px' }}>
+                                            <div className="absolute top-0 left-0 scale-[0.22] origin-top-left shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+                                                <div ref={flyerRef}>
+                                                    <AthleteFlyer
+                                                        name={selectedAthlete.full_name}
+                                                        category={selectedAthlete.category}
+                                                        gender={selectedAthlete.gender}
+                                                    />
+                                                </div>
                                             </div>
                                         </div>
 

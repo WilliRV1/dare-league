@@ -101,7 +101,7 @@ const Countdown: React.FC = () => {
       <div className="flex gap-2 md:gap-4 justify-center items-center max-w-4xl mx-auto px-4">
         <TimeBox value={timeLeft.days} label="Días" />
         <TimeBox value={timeLeft.hours} label="Horas" />
-        <div className="hidden md:flex flex-col items-center justify-center bg-primary p-4 md:p-6 min-w-[80px] md:min-w-[120px] shadow-[0_0_30px_rgba(239,53,61,0.4)]">
+        <div className="flex flex-col items-center justify-center bg-primary p-4 md:p-6 min-w-[80px] md:min-w-[120px] shadow-[0_0_30px_rgba(239,53,61,0.4)]">
           <span className="font-display text-4xl md:text-7xl text-black tracking-tighter leading-none">
             {timeLeft.minutes < 10 ? `0${timeLeft.minutes}` : timeLeft.minutes}
           </span>

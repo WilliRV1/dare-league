@@ -552,8 +552,16 @@ const RegistrationForm: React.FC = () => {
 
       {/* Waiver Modal */}
       {showWaiver && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/95 backdrop-blur-sm animate-fade-in">
-          <div className="bg-zinc-950 border border-zinc-900 w-full max-w-2xl flex flex-col max-h-[90vh]">
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-sm animate-fade-in"
+          style={{
+            paddingTop: 'max(1rem, env(safe-area-inset-top))',
+            paddingBottom: 'max(1rem, env(safe-area-inset-bottom))',
+            paddingLeft: '1rem',
+            paddingRight: '1rem',
+          }}
+        >
+          <div className="bg-zinc-950 border border-zinc-900 w-full max-w-2xl flex flex-col" style={{ maxHeight: 'min(90vh, calc(100dvh - 2rem))' }}>
             <div className="p-6 border-b border-zinc-900 flex justify-between items-center">
               <h3 className="font-display text-2xl uppercase text-white">Deslinde de <span className="text-primary italic">Responsabilidad</span></h3>
               <button onClick={() => setShowWaiver(false)} className="text-zinc-500 hover:text-white transition-colors">
@@ -631,7 +639,10 @@ const RegistrationForm: React.FC = () => {
                 </details>
               </div>
             </div>
-            <div className="p-6 border-t border-zinc-900 bg-zinc-900/30">
+            <div
+              className="p-6 border-t border-zinc-900 bg-zinc-900/30"
+              style={{ paddingBottom: 'max(1.5rem, env(safe-area-inset-bottom))' }}
+            >
               <button
                 onClick={() => {
                   setFormData(prev => ({ ...prev, termsAccepted: true }));
