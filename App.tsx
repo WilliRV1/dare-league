@@ -31,6 +31,13 @@ function App() {
   const [showStatusCheck, setShowStatusCheck] = useState(false);
   const [currentPrice, setCurrentPrice] = useState<string>('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [toastMsg, setToastMsg] = useState<string | null>(null);
+
+  const copyToClipboard = (text: string, label: string) => {
+    navigator.clipboard.writeText(text);
+    setToastMsg(label);
+    setTimeout(() => setToastMsg(null), 2000);
+  };
 
   useEffect(() => {
     // Check for obscure admin route (Hardening)
@@ -547,7 +554,7 @@ function App() {
                   <span className="text-zinc-500 text-xs font-black uppercase tracking-widest">Número</span>
                   <span className="text-white font-body tracking-wider text-xl flex items-center gap-2">
                     53350851
-                    <button onClick={() => { navigator.clipboard.writeText('53350851'); alert('Copiado'); }} className="text-zinc-500 hover:text-white transition-colors">
+                    <button onClick={() => copyToClipboard('53350851', 'Número copiado')} className="text-zinc-500 hover:text-white transition-colors">
                       <span className="material-symbols-outlined text-sm">content_copy</span>
                     </button>
                   </span>
@@ -556,7 +563,7 @@ function App() {
                   <span className="text-zinc-500 text-xs font-black uppercase tracking-widest">Llave Nu</span>
                   <span className="text-white font-body tracking-wider flex items-center gap-2">
                     @WRV034
-                    <button onClick={() => { navigator.clipboard.writeText('@WRV034'); alert('Copiado'); }} className="text-zinc-500 hover:text-white transition-colors">
+                    <button onClick={() => copyToClipboard('@WRV034', 'Llave copiada')} className="text-zinc-500 hover:text-white transition-colors">
                       <span className="material-symbols-outlined text-sm">content_copy</span>
                     </button>
                   </span>
@@ -575,7 +582,7 @@ function App() {
                   <span className="text-zinc-500 text-xs font-black uppercase tracking-widest">Celular</span>
                   <span className="text-white font-body tracking-wider text-xl flex items-center gap-2">
                     313 633 6446
-                    <button onClick={() => { navigator.clipboard.writeText('3136336446'); alert('Copiado'); }} className="text-zinc-500 hover:text-white transition-colors">
+                    <button onClick={() => copyToClipboard('3136336446', 'Número copiado')} className="text-zinc-500 hover:text-white transition-colors">
                       <span className="material-symbols-outlined text-sm">content_copy</span>
                     </button>
                   </span>
@@ -758,6 +765,14 @@ function App() {
       <WhatsAppButton />
 
       {showStatusCheck && <RegistrationStatus onClose={() => setShowStatusCheck(false)} />}
+
+      {/* Toast de copiado */}
+      <div className={`fixed bottom-24 md:bottom-8 left-1/2 -translate-x-1/2 z-[100] transition-all duration-300 ${toastMsg ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none'}`}>
+        <div className="bg-zinc-900 border border-zinc-700 text-white text-xs font-black uppercase tracking-widest px-5 py-3 flex items-center gap-2 shadow-xl">
+          <span className="material-symbols-outlined text-primary text-sm">check_circle</span>
+          {toastMsg}
+        </div>
+      </div>
 
     </div>
   );
