@@ -20,7 +20,7 @@ const FAQ_ITEMS: FAQItem[] = [
     },
     {
         question: "¿Cómo se definen los heats?",
-        answer: "El bracket y horarios se publican 48 horas antes en @dareleague2025 y por email. Estudia tu bracket. Conoce a tu rival. No hay cambios de horario una vez publicado."
+        answer: "El bracket y horarios se publican 48 horas antes en @dare_league2026 y por email. Estudia tu bracket. Conoce a tu rival. No hay cambios de horario una vez publicado."
     },
     {
         question: "¿Qué pasa si me lesiono antes del evento?",

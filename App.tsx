@@ -259,23 +259,44 @@ function App() {
 
           <div className="mb-16">
             <Countdown />
-            <div className="mt-8 flex flex-col items-center gap-2 animate-pulse">
-              <div className="flex items-center gap-2 text-primary uppercase font-black tracking-widest text-xs">
-                <span className="material-symbols-outlined text-sm">sell</span>
-                Precio sube $25.000 al cambiar etapa
-              </div>
-              <div className="flex items-center gap-2 text-zinc-500 uppercase font-bold tracking-widest text-[10px]">
-                <span className="material-symbols-outlined text-xs">group</span>
-                <span>
-                  {128 -
-                    (categoryCounts['PRINCIPIANTE_MASCULINO'] || 0) -
-                    (categoryCounts['PRINCIPIANTE_FEMENINO'] || 0) -
-                    (categoryCounts['INTERMEDIO_MASCULINO'] || 0) -
-                    (categoryCounts['INTERMEDIO_FEMENINO'] || 0)
-                  } cupos totales disponibles
-                </span>
-              </div>
-            </div>
+            {(() => {
+              const totalFilled =
+                (categoryCounts['PRINCIPIANTE_MASCULINO'] || 0) +
+                (categoryCounts['PRINCIPIANTE_FEMENINO'] || 0) +
+                (categoryCounts['INTERMEDIO_MASCULINO'] || 0) +
+                (categoryCounts['INTERMEDIO_FEMENINO'] || 0);
+              const pct = Math.min(Math.max(Math.round((totalFilled / 128) * 100), 0), 100);
+              const remaining = 128 - totalFilled;
+              const isAlmostFull = remaining <= 20;
+              return (
+                <div className="mt-8 flex flex-col items-center gap-3">
+                  <div className="flex items-center gap-2 text-primary uppercase font-black tracking-widest text-xs animate-pulse">
+                    <span className="material-symbols-outlined text-sm">sell</span>
+                    Precio sube $25.000 al cambiar etapa
+                  </div>
+                  <div className="flex flex-col items-center gap-1.5 w-full max-w-[280px] md:max-w-xs">
+                    <div className="flex justify-between w-full text-[10px] font-black uppercase tracking-widest">
+                      <span className="text-zinc-500 flex items-center gap-1">
+                        <span className="material-symbols-outlined text-[11px]">group</span>
+                        {totalFilled} inscritos
+                      </span>
+                      <span className={isAlmostFull ? 'text-primary animate-pulse' : 'text-zinc-600'}>
+                        {remaining} disponibles
+                      </span>
+                    </div>
+                    <div className="h-[3px] w-full bg-zinc-900 overflow-hidden">
+                      <div
+                        className="h-full bg-gradient-to-r from-primary to-red-400 transition-all duration-1000"
+                        style={{ width: `${Math.max(pct, 1)}%` }}
+                      />
+                    </div>
+                    <p className="text-zinc-700 text-[9px] font-black uppercase tracking-widest self-end">
+                      {pct}% ocupado · 128 cupos totales
+                    </p>
+                  </div>
+                </div>
+              );
+            })()}
           </div>
 
           <div className="flex flex-col gap-6 items-center justify-center">
@@ -402,6 +423,71 @@ function App() {
       <Prizes />
 
       <AthleteWall />
+
+      {/* El Escenario — Video Section */}
+      <section className="py-32 px-4 bg-zinc-950 border-t border-zinc-900 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-noise opacity-10 pointer-events-none" />
+        <div className="max-w-5xl mx-auto relative z-10">
+          <div className="text-center mb-12">
+            <p className="text-primary text-xs font-black uppercase tracking-[0.4em] mb-4">La Sede Oficial</p>
+            <h2 className="font-display text-6xl md:text-8xl uppercase tracking-tighter leading-none text-white">
+              El <span className="text-primary italic">Escenario</span>
+            </h2>
+            <p className="text-zinc-500 uppercase tracking-widest text-sm font-bold mt-4">
+              Box Coach Pipe Rubio · La Merced, Cali
+            </p>
+          </div>
+
+          <div className="flex flex-col md:flex-row items-center md:items-start gap-12 justify-center">
+            {/* Reel embed */}
+            <div className="w-full max-w-[340px] flex-shrink-0 shadow-[0_0_60px_rgba(239,53,61,0.15)] border border-zinc-900 overflow-hidden">
+              <iframe
+                src="https://www.instagram.com/reel/DTgVVrwEuAp/embed/"
+                width="340"
+                style={{ height: '600px', display: 'block' }}
+                frameBorder="0"
+                scrolling="no"
+                allowTransparency={true}
+                allow="encrypted-media"
+                loading="lazy"
+                title="Dare League — El Escenario"
+              />
+            </div>
+
+            {/* Copy + CTA */}
+            <div className="flex flex-col justify-center gap-8 text-center md:text-left max-w-sm">
+              <div className="space-y-4 border-l-0 md:border-l-4 md:border-primary md:pl-8">
+                <p className="text-zinc-300 font-body text-xl leading-relaxed">
+                  Este es el box donde se define quién tiene nivel.
+                </p>
+                <p className="text-zinc-500 font-body leading-relaxed">
+                  Infraestructura de competencia real. El mismo piso donde entrena la élite de Cali.
+                  El <strong className="text-white">18 de Julio</strong>, lo tomaremos por completo.
+                </p>
+              </div>
+              <div className="flex flex-col gap-3 items-center md:items-start">
+                <a
+                  href="#register"
+                  onClick={(e) => scrollToSection(e, 'register')}
+                  className="inline-block bg-primary hover:bg-white hover:text-black text-white font-display uppercase tracking-widest px-10 py-5 transition-all duration-300 shadow-[0_0_30px_rgba(239,53,61,0.35)] text-xl clip-path-slant"
+                >
+                  Inscribirme
+                </a>
+                <a
+                  href="https://maps.app.goo.gl/X1GtP9rw6NHND4GSA"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center gap-2 text-zinc-600 hover:text-primary transition-colors text-xs font-black uppercase tracking-widest"
+                >
+                  <span className="material-symbols-outlined text-sm">location_on</span>
+                  Ver ubicación en Maps
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Bracket Section (Locked) */}
       <section id="bracket" className="py-24 px-4 bg-zinc-900/30 border-t border-zinc-900 scroll-mt-24">
@@ -589,7 +675,6 @@ function App() {
           <div className="flex flex-wrap justify-center gap-8 md:gap-16 mb-16 font-display text-sm tracking-widest text-zinc-500 uppercase">
             <a href="https://www.instagram.com/dare_league2026/" target="_blank" rel="noreferrer" className="hover:text-white transition-colors">Instagram</a>
             <a href="https://wa.me/573136336446" target="_blank" rel="noreferrer" className="hover:text-white transition-colors">WhatsApp</a>
-            <a href="#" className="hover:text-white transition-colors">Reglamento</a>
             <a href="https://www.instagram.com/coach.piperubio/" target="_blank" rel="noreferrer" className="hover:text-white transition-colors italic text-[10px] font-black tracking-[.2em] self-center">COACH PIPE RUBIO</a>
           </div>
 
@@ -619,13 +704,13 @@ function App() {
       {/* Mobile Menu Overlay */}
       <div
         className={`
-          md:hidden fixed inset-0 z-[65] flex flex-col bg-black/98 backdrop-blur-md
+          md:hidden fixed inset-0 z-[65] flex flex-col bg-black backdrop-blur-md
           transition-all duration-300 ease-in-out
           ${isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}
         `}
       >
-        {/* Top bar spacer */}
-        <div className="h-20" />
+        {/* Top bar spacer — pointer-events-none para no bloquear el botón hamburguesa */}
+        <div className="h-20 pointer-events-none" />
 
         <nav className="flex-1 flex flex-col justify-center px-8 gap-1">
           {[

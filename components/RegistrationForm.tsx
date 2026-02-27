@@ -379,14 +379,18 @@ const RegistrationForm: React.FC = () => {
                   <input name="documentId" value={formData.documentId} onChange={handleChange} placeholder="CÉDULA" className="w-full bg-black border-0 border-b border-zinc-800 p-4 text-white placeholder-zinc-800 focus:ring-0 focus:border-primary transition-all font-body text-lg" type="text" />
                 </InputGroup>
               </div>
-              <div className="grid md:grid-cols-3 gap-8">
+              <div className="grid md:grid-cols-2 gap-8">
                 <InputGroup label="Edad" error={errors.age}>
                   <input name="age" value={formData.age} onChange={handleChange} placeholder="EDAD" className="w-full bg-black border-0 border-b border-zinc-800 p-4 text-white placeholder-zinc-800 focus:ring-0 focus:border-primary transition-all font-body" type="number" />
                 </InputGroup>
                 <InputGroup label="WhatsApp" error={errors.phone}>
                   <input name="phone" value={formData.phone} onChange={handleChange} placeholder="CELULAR" className="w-full bg-black border-0 border-b border-zinc-800 p-4 text-white placeholder-zinc-800 focus:ring-0 focus:border-primary transition-all font-body" type="tel" />
                 </InputGroup>
-
+              </div>
+              <div className="grid md:grid-cols-2 gap-8">
+                <InputGroup label="Email" error={errors.email}>
+                  <input name="email" value={formData.email} onChange={handleChange} placeholder="CORREO" className="w-full bg-black border-0 border-b border-zinc-800 p-4 text-white placeholder-zinc-800 focus:ring-0 focus:border-primary transition-all font-body" type="email" />
+                </InputGroup>
                 <InputGroup label="Talla de Camisa" error={errors.shirtSize}>
                   <select
                     name="shirtSize"
@@ -400,10 +404,6 @@ const RegistrationForm: React.FC = () => {
                     <option value="L">L - LARGE</option>
                     <option value="XL">XL - EXTRA LARGE</option>
                   </select>
-                </InputGroup>
-
-                <InputGroup label="Email" error={errors.email}>
-                  <input name="email" value={formData.email} onChange={handleChange} placeholder="CORREO" className="w-full bg-black border-0 border-b border-zinc-800 p-4 text-white placeholder-zinc-800 focus:ring-0 focus:border-primary transition-all font-body" type="email" />
                 </InputGroup>
               </div>
             </div>
