@@ -466,8 +466,7 @@ function App() {
                   Este es el box donde se define quién tiene nivel.
                 </p>
                 <p className="text-zinc-500 font-body leading-relaxed">
-                  Infraestructura de competencia real. El mismo piso donde entrena la élite de Cali.
-                  El <strong className="text-white">18 de Julio</strong>, lo tomaremos por completo.
+                  El espacio en el que vas a demostrar de qué estás hecho.
                 </p>
               </div>
               <div className="flex flex-col gap-3 items-center md:items-start">
